@@ -9,7 +9,7 @@ class Result extends StatelessWidget {
       TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50);
 
   int finalScore() {
-    int totalCorrect = 0;
+    int totalCorrect = -1;
     _userFinalAnswers.forEach((element) {
       if (element == true) totalCorrect++;
     });
@@ -26,7 +26,7 @@ class Result extends StatelessWidget {
         children: [
           Text(
             // 'Your percentage is: ${finalScore()}%',
-            'You percentage is: ${finalScore()} / ${_userFinalAnswers.length}',
+            'You percentage is: ${finalScore()} / ${_userFinalAnswers.length-1}',
             style: style,
             textAlign: TextAlign.center,
           ),

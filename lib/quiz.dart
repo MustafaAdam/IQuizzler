@@ -40,7 +40,9 @@ class _QuizState extends State<Quiz> {
         questions.add(element.getQuestion
                              .replaceAll('&quot;', '"')
                              .replaceAll('&#039;', "'")
-                             .replaceAll('&eacute;', 'e'));
+                             .replaceAll('&eacute;', 'e')
+                             .replaceAll('&deg;C', 'Celsius')
+                             .replaceAll('&deg;F', 'Fahrenheit'));
         correctAnswers.add(element.getCorrectAnswer.toLowerCase());
         category.add(element.getCategory);
       });
@@ -115,7 +117,9 @@ class _QuizState extends State<Quiz> {
                         style: style.copyWith(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
-                    ))),
+                    )
+                )
+            ),
             Expanded(
                 flex: 1,
                 child: Container(
