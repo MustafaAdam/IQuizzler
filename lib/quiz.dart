@@ -104,23 +104,68 @@ class _QuizState extends State<Quiz> {
                 ),
               ),
             ),
-            Expanded(
-                flex: 1,
-                child: Container(
-                    color: Colors.green,
-                    child: FlatButton(
-                      onPressed: () {
-                        checkAnswer(true);
-                      },
-                      child: Text(
-                        "True",
-                        style: style.copyWith(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+
+
+            this.currentIndex == 0 ? FutureBuilder(
+              future: Future.delayed(Duration(seconds: 1)),
+              builder: (_, snapshot) {
+                if(snapshot.connectionState == ConnectionState.done) {
+                  return Expanded(
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [Colors.amber,Colors.green, Colors.white],
+                          radius: 0.7,
+                        ),
                       ),
+                      height: 50, width: 50,
+                        // color: Colors.black,
+                        child: FlatButton(
+                          onPressed: () {
+                            checkAnswer(true);
+                          },
+                          child: Text(
+                            "Go!",
+                            style: style.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 60),
+                          ),
+                        )
                     )
-                )
-            ),
-            Expanded(
+                  );
+                }
+                return Container(
+                  height: 200, width: 1,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.amberAccent),
+                    strokeWidth: 4.0,
+                  ),
+                );
+              },
+            ) : Expanded(
+                    flex: 1,
+                    child: Container(
+                        color: Colors.green,
+                        child: FlatButton(
+                          onPressed: () {
+                            checkAnswer(true);
+                          },
+                          child: Text(
+                            "True",
+                            style: style.copyWith(
+                                color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                    )
+                  ),
+
+
+            this.currentIndex == 0 ? Container() : Expanded(
                 flex: 1,
                 child: Container(
                     color: Colors.red,
