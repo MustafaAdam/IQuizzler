@@ -21,10 +21,7 @@ List<DropdownMenuItem<String>> dropDownCatogry(List<String> names) {
   }).toList();
 }
 
-
-
 class LandingPage extends StatefulWidget {
-
   LandingPage({Key key}) : super(key: key);
 
   @override
@@ -32,6 +29,7 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int numberOfQuestions = 1;
   String difficulty;
 
@@ -48,102 +46,134 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.amber.shade400,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Choose the Category: ",
-            style: style,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
-            height: 7,
-          ),
-          DropdownButton(
-                elevation: 12,
-                dropdownColor: Colors.blue,
-                hint: Text(
-                  'Category',
-                  textAlign: TextAlign.center,
+    return Scaffold(
+      key: _scaffoldKey,
+        body: Container(
+      width: 380,
+      child: Material(
+        color: Colors.amber.shade400,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Choose the Category: ",
+              style: style,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 7,
+            ),
+            DropdownButton(
+              elevation: 12,
+              dropdownColor: Colors.blue,
+              hint: Text(
+                'Category',
+                textAlign: TextAlign.center,
+              ),
+              icon: Icon(Icons.arrow_drop_down_circle),
+              value: currentCategory,
+              style: style,
+              items: dropDownCatogry(this.names),
+              onChanged: (choice) {
+                setState(() {
+                  this.currentCategory = choice;
+                });
+              },
+            ),
+            Text(
+              "Choose the number of questions: ",
+              style: style,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            NumberPicker.integer(
+              initialValue: numberOfQuestions,
+              minValue: 1,
+              maxValue: 50,
+              onChanged: (number) {
+                setState(() {
+                  this.numberOfQuestions = number;
+                });
+              },
+              itemExtent: 60,
+              scrollDirection: Axis.vertical,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              "Choose the difficulty: ",
+              style: style,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            DropdownButton(
+              elevation: 12,
+              dropdownColor: Colors.blue,
+              hint: Text('Difficulty'),
+              icon: Icon(Icons.arrow_drop_down_circle),
+              value: difficulty,
+              style: style,
+              items: [
+                DropdownMenuItem(
+                  child: Text("Easy", style: style),
+                  onTap: () => setState(() {
+                    this.difficulty = 'easy';
+                  }),
+                  value: 'easy',
                 ),
-                icon: Icon(Icons.arrow_drop_down_circle),
-                value: currentCategory,
-                style: style,
-                items: dropDownCatogry(this.names),
-                onChanged: (choice) {
-                  setState(() {
-                    this.currentCategory = choice;
-                  });
+                DropdownMenuItem(
+                  child: Text("Medium", style: style),
+                  onTap: () => setState(() {
+                    this.difficulty = 'medium';
+                  }),
+                  value: 'medium',
+                ),
+                DropdownMenuItem(
+                  child: Text("Hard", style: style),
+                  onTap: () => setState(() {
+                    this.difficulty = 'hard';
+                  }),
+                  value: 'hard',
+                ),
+              ],
+              onChanged: (choice) {
+                setState(() {
+                  this.difficulty = choice;
+                });
+              },
+            ),
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              margin: EdgeInsets.only(top: 40),
+              child: MaterialButton(
+                child: Icon(Icons.arrow_forward_ios),
+                color: Colors.blue,
+                onPressed: () {
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content:
+                          Text('You did not choose difficulty or category')));
+                  assert(
+                      this.currentCategory != null && this.difficulty != null);
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Quiz(
+                          this.numberOfQuestions,
+                          this.difficulty,
+                          this.ids[this.names.indexWhere(
+                              (element) => element == this.currentCategory)])));
                 },
               ),
-          Text(
-            "Choose the number of questions: ",
-            style: style,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 30,),
-          NumberPicker.integer(
-            initialValue: numberOfQuestions,
-            minValue: 1,
-            maxValue: 50,
-            onChanged: (number) { 
-              setState(() {
-                this.numberOfQuestions = number;
-              });
-            },
-            itemExtent: 60,
-            scrollDirection: Axis.vertical,
-          ),
-          SizedBox(height: 30,),
-          Text(
-            "Choose the difficulty: ",
-            style: style,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 10,),
-          DropdownButton(
-            elevation: 12,
-            dropdownColor: Colors.blue,
-            hint: Text('Difficulty'),
-            icon: Icon(Icons.arrow_drop_down_circle),
-            value: difficulty,
-            style: style,
-            items: [
-              DropdownMenuItem(
-                child: Text("Easy", style: style),
-                onTap: () => setState(() {this.difficulty = 'easy';}),
-                value: 'easy',
-              ),
-              DropdownMenuItem(
-                child: Text("Medium", style: style),
-                onTap: () => setState(() {this.difficulty = 'medium';}),
-                value: 'medium',
-              ),
-              DropdownMenuItem(
-                child: Text("Hard", style: style),
-                onTap: () => setState(() {this.difficulty = 'hard';}),
-                value: 'hard',
-              ),
-            ],
-            onChanged: (choice) {
-              setState(() {
-                this.difficulty = choice;
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder:
-                    (context) => Quiz(
-                      this.numberOfQuestions,
-                      this.difficulty,
-                      this.ids[this.names.indexWhere((element) => element == this.currentCategory)]
-                    )
-                  )
-                );
-              });
-            },
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
-    );
+    ));
   }
 }
