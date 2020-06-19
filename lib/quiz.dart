@@ -21,13 +21,13 @@ class _QuizState extends State<Quiz> {
 
   final TextStyle style = GoogleFonts.vollkorn(
     color: Colors.white,
-    fontSize: 30,
-    fontWeight: FontWeight.w500,
+    fontSize: 25,
+    fontWeight: FontWeight.w100,
   );
 
   @override
   void initState() {
-    trivia = fetchTrivia('https://opentdb.com/api.php?amount=${widget.numberOfQuestions}&difficulty=easy&type=boolean'
+    trivia = fetchTrivia('https://opentdb.com/api.php?amount=${widget.numberOfQuestions}&difficulty=${widget.difficulty}&type=boolean'
     );
     getQuestionsAndAnswers();
     // Future.delayed(Duration(seconds: 1), () {print("HA");});
@@ -45,6 +45,7 @@ class _QuizState extends State<Quiz> {
                              .replaceAll('&deg;F', 'Fahrenheit'));
         correctAnswers.add(element.getCorrectAnswer.toLowerCase());
         category.add(element.getCategory);
+        difficulties.add(element.difficulty);
       });
     }).catchError((onError) {
       print(onError);
@@ -54,6 +55,7 @@ class _QuizState extends State<Quiz> {
   List<String> questions = ["Are you ready?"];
   List<String> correctAnswers = ['True'];
   List<String> category = [''];
+  List<String> difficulties = [''];
   List<bool> finalAnswers = [];
 
   int currentIndex = 0;
@@ -82,7 +84,7 @@ class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.3),
+      color: Colors.black87,
       child: SafeArea(
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -91,7 +93,14 @@ class _QuizState extends State<Quiz> {
               margin: EdgeInsets.only(top: 20),
               child: Text(
                 category[currentIndex],
-                style: style,
+                style: TextStyle(fontSize: 24),
+                textAlign: TextAlign.center,),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                difficulties[currentIndex],
+                style: style.copyWith(color: Colors.white54),
                 textAlign: TextAlign.center,),
             ),
             Expanded(

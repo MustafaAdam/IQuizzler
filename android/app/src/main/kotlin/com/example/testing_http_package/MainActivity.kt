@@ -1,4 +1,4 @@
-package com.example.testing_http_package
+package com.mustafa.IQuizzler
 
 import io.flutter.embedding.android.FlutterActivity
 
