@@ -8,7 +8,9 @@ import 'api_calls.dart';
 class Quiz extends StatefulWidget {
   final int numberOfQuestions;
   final String difficulty;
-  Quiz(this.numberOfQuestions, this.difficulty,
+  final int category;
+
+  Quiz(this.numberOfQuestions, this.difficulty, this.category,
           {Key key}) : super(key: key);
 
   @override
@@ -27,10 +29,8 @@ class _QuizState extends State<Quiz> {
 
   @override
   void initState() {
-    trivia = fetchTrivia('https://opentdb.com/api.php?amount=${widget.numberOfQuestions}&difficulty=${widget.difficulty}&type=boolean'
-    );
+    trivia = fetchTrivia('https://opentdb.com/api.php?amount=${widget.numberOfQuestions}&category=${widget.category}&difficulty=${widget.difficulty}&type=boolean');
     getQuestionsAndAnswers();
-    // Future.delayed(Duration(seconds: 1), () {print("HA");});
     super.initState();
   }
 
@@ -42,7 +42,8 @@ class _QuizState extends State<Quiz> {
                              .replaceAll('&#039;', "'")
                              .replaceAll('&eacute;', 'e')
                              .replaceAll('&deg;C', 'Celsius')
-                             .replaceAll('&deg;F', 'Fahrenheit'));
+                             .replaceAll('&deg;F', 'Fahrenheit')
+                             .replaceAll('&ocirc;', 'o'));
         correctAnswers.add(element.getCorrectAnswer.toLowerCase());
         category.add(element.getCategory);
         difficulties.add(element.difficulty);
@@ -84,7 +85,7 @@ class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black87,
+      color: Colors.white24,
       child: SafeArea(
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

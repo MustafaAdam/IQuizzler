@@ -22,6 +22,7 @@ Future<List<Results>> fetchTrivia(String url) async {
     var answer = json.decode(response.body);
     return Question.fromJson(answer).results;
   }
-  else
+  else {
     throw Exception('Failure to launch');
+  }
 }
