@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 
+
+
+final TextStyle style =
+  TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50);
+
 class Result extends StatelessWidget {
   final List<bool> _userFinalAnswers;
 
   Result(this._userFinalAnswers, {Key key}) : super(key: key);
-
-  final TextStyle style =
-      TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50);
 
   int finalScore() {
     int totalCorrect = -1;
     _userFinalAnswers.forEach((element) {
       if (element == true) totalCorrect++;
     });
-    // return (totalCorrect / _userFinalAnswers.length * 100);
     return totalCorrect;
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.red.withOpacity(0.7),
+      color: Colors.red.withOpacity(0.6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            // 'Your percentage is: ${finalScore()}%',
             'You percentage is: ${finalScore()} / ${_userFinalAnswers.length-1}',
             style: style,
             textAlign: TextAlign.center,
@@ -39,12 +39,7 @@ class Result extends StatelessWidget {
                 size: 80,
               ),
               onPressed: () {
-                // Navigator.of(context).popUntil(ModalRoute.withName('landing_page'));
-                // Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
-                int popCounter = 0;
-                Navigator.of(context).popUntil((route) {
-                  return popCounter++ == 2;
-                });
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
           )

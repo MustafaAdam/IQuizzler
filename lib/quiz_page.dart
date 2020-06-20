@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:testing_http_package/trivia.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'quiz_result.dart';
+import 'result_page.dart';
 import 'api_calls.dart';
+import 'model.dart';
+
+
+final TextStyle style = GoogleFonts.vollkorn(
+  color: Colors.amberAccent,
+  fontSize: 25,
+  fontWeight: FontWeight.w100,
+);
 
 class Quiz extends StatefulWidget {
   final int numberOfQuestions;
@@ -17,19 +24,19 @@ class Quiz extends StatefulWidget {
   _QuizState createState() => _QuizState();
 }
 
+
 class _QuizState extends State<Quiz> {
 
   Future<List<Results>> trivia;
 
-  final TextStyle style = GoogleFonts.vollkorn(
-    color: Colors.white,
-    fontSize: 25,
-    fontWeight: FontWeight.w100,
-  );
-
   @override
   void initState() {
+    print('Difficulty: ' + widget.difficulty);
+    print('Category: ' + widget.category.toString());
+    print('Number of Questions: ' + widget.numberOfQuestions.toString());
+
     trivia = fetchTrivia('https://opentdb.com/api.php?amount=${widget.numberOfQuestions}&category=${widget.category}&difficulty=${widget.difficulty}&type=boolean');
+    print('https://opentdb.com/api.php?amount=${widget.numberOfQuestions}&category=${widget.category}&difficulty=${widget.difficulty}&type=boolean');
     getQuestionsAndAnswers();
     super.initState();
   }
@@ -48,12 +55,12 @@ class _QuizState extends State<Quiz> {
         category.add(element.getCategory);
         difficulties.add(element.difficulty);
       });
-    }).catchError((onError) {
+    }).catchError((onError) {  // ? Catch the exceptions from f
       print(onError);
     });
   }
 
-  List<String> questions = ["Are you ready?"];
+  List<String> questions = ["Fetching questions ..."];
   List<String> correctAnswers = ['True'];
   List<String> category = [''];
   List<String> difficulties = [''];
@@ -85,7 +92,7 @@ class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white24,
+      color: Colors.blue.withOpacity(0.2),
       child: SafeArea(
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,11 +101,11 @@ class _QuizState extends State<Quiz> {
               margin: EdgeInsets.only(top: 20),
               child: Text(
                 category[currentIndex],
-                style: TextStyle(fontSize: 24),
+                style: style.copyWith(color: Colors.white),
                 textAlign: TextAlign.center,),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 10),
               child: Text(
                 difficulties[currentIndex],
                 style: style.copyWith(color: Colors.white54),
@@ -178,7 +185,7 @@ class _QuizState extends State<Quiz> {
             this.currentIndex == 0 ? Container() : Expanded(
                 flex: 1,
                 child: Container(
-                    color: Colors.red,
+                    color: Colors.red.withOpacity(0.7),
                     child: FlatButton(
                       onPressed: () {
                         checkAnswer(false);
